@@ -1,0 +1,7 @@
+
+services:
+  consumer:
+    build: . 
+    volumes:
+      - .:/app
+    container_name: CONSUMER
