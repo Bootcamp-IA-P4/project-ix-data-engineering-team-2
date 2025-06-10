@@ -39,7 +39,7 @@ services:
 
   kafka_consumer:
     container_name: kafka_consumer
-    build: ./kafka_consumer
+    build: ./src/kafka_consumer
     depends_on:
       - kafka
     restart: always

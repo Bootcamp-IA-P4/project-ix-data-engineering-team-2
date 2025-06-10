@@ -1,6 +1,5 @@
 from kafka import KafkaConsumer
 import json
-from aggregator import agregar_datos
 from storage_mongo import guardar_en_mongo
 
 def main():
@@ -21,12 +20,6 @@ def main():
         # Guardar en Mongo
         guardar_en_mongo(message.value)
 
-        # Agregar datos y verificar si se puede unificar
-        print("Agregando datos...")
-        resultado = agregar_datos(message.value)
-        if resultado:
-            print("\n✅ Registro unificado listo para guardar:")
-            print(json.dumps(resultado, indent=2))
 
             
 
