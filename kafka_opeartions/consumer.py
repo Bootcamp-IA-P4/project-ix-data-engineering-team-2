@@ -13,22 +13,21 @@ def main():
         value_deserializer=lambda x: json.loads(x.decode('utf-8')) # Deserializador para convertir el mensaje de bytes a JSON
     )
 
-    print("Esperando mensajes...")
+    #print("Esperando mensajes...")
     for message in consumer:
-        print("Mensaje recibido:")
-        print(json.dumps(message.value, indent=2))  # bonito para debug
+        #print("Mensaje recibido:")
+        #print(json.dumps(message.value, indent=2))  # bonito para debug
 
         # Guardar en Mongo
         guardar_en_mongo(message.value)
 
         # Agregar datos y verificar si se puede unificar
-        print("Agregando datos...")
+        #print("Agregando datos...")
         resultado = agregar_datos(message.value)
         if resultado:
-            print("\n✅ Registro unificado listo para guardar:")
-            print(json.dumps(resultado, indent=2))
+           # print("\n✅ Registro unificado listo para guardar:")
+            #print(json.dumps(resultado, indent=2))
 
             
-
 if __name__ == "__main__":
     main()

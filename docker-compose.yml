@@ -46,6 +46,15 @@ services:
     networks:
       - kafka_network
 
+  kafka_elt:
+    container_name: etl
+    build: ./src/etl
+    depends_on:
+      - kafka
+    restart: always
+    networks:
+      - kafka_network
+
   mongo:
     image: mongo
     container_name: mongo
