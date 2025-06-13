@@ -63,11 +63,18 @@ def clean_data(record):
     if 'city' in record:
         record['city'] = clean_address_field(record['city'])
 
-    if 'address' in record:  # ← Aquí se limpia el address general (como "Contrada Luigi, 37")
+    if 'address' in record:
         record['address'] = clean_address_field(record['address'])
 
     if 'company address' in record:
         record['company address'] = clean_address_field(record['company address'])
+
+    if 'sex' in record:
+        value = record['sex']
+        if isinstance(value, list) and len(value) > 0:
+            record['sex'] = str(value[0])
+        elif isinstance(value, str):
+            record['sex'] = value
 
     return record
 
