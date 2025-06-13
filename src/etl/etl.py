@@ -27,6 +27,50 @@ grouping_map = {
     'professional_': ['fullname', 'company', 'company address', 'company_telfnumber', 'company_email', 'job'],
     'bank_': ['IBAN', 'salary']
 }
+import re
+
+TITLES = ['mr', 'mrs', 'ms', 'sr', 'sra', 'dr', 'dott', 'sig', 'mtro', 'sr(a)', 'mrs.', 'dr.', 'ms.', 'sr.', 'sig.']
+
+def clean_name(name):
+    if not isinstance(name, str):
+        return name
+    name_clean = name.lower()
+    for title in TITLES:
+        name_clean = re.sub(rf'\b{re.escape(title)}\b', '', name_clean, flags=re.IGNORECASE)
+    name_clean = re.sub(r'[().]', '', name_clean)
+    return name_clean.strip().title()
+
+def clean_telf(telf):
+    if not isinstance(telf, str):
+        return telf
+    return re.sub(r'[^+0-9]', '', telf)
+
+def clean_address_field(text):
+    if not isinstance(text, str):
+        return text
+    return text.replace(',', '')
+
+def clean_data(record):
+    if 'name' in record:
+        record['name'] = clean_name(record['name'])
+
+    if 'telfnumber' in record:
+        record['telfnumber'] = clean_telf(record['telfnumber'])
+
+    if 'company_telfnumber' in record:
+        record['company_telfnumber'] = clean_telf(record['company_telfnumber'])
+
+    if 'city' in record:
+        record['city'] = clean_address_field(record['city'])
+
+    if 'address' in record:  # ← Aquí se limpia el address general (como "Contrada Luigi, 37")
+        record['address'] = clean_address_field(record['address'])
+
+    if 'company address' in record:
+        record['company address'] = clean_address_field(record['company address'])
+
+    return record
+
 
 def find_person_key(record):
     for key in identifying_keys:
@@ -83,6 +127,7 @@ SAVE_INTERVAL = 5000
 try:
     for message in consumer:
         record = message.value
+        record = clean_data(record)
         idx = find_person_key(record)
         if idx is not None:
             people_data[idx].update(record)
