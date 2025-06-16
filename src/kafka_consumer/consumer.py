@@ -12,10 +12,10 @@ def main():
         value_deserializer=lambda x: json.loads(x.decode('utf-8')) # Deserializador para convertir el mensaje de bytes a JSON
     )
 
-    print("Esperando mensajes...")
+    #print("Esperando mensajes...")
     for message in consumer:
-        print("Mensaje recibido:")
-        print(json.dumps(message.value, indent=2))  # bonito para debug
+        #print("Mensaje recibido:")
+        #print(json.dumps(message.value, indent=2))  # bonito para debug
 
         # Guardar en Mongo
         guardar_en_mongo(message.value)

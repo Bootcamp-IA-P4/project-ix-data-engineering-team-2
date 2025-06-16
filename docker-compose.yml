@@ -34,6 +34,7 @@ services:
     depends_on:
       - kafka
     restart: always
+    command: ["./wait-for-it.sh", "kafka:9092", "--timeout=60", "--", "python", "./kafka_push.py"]
     networks:
       - kafka_network
 
@@ -43,16 +44,17 @@ services:
     depends_on:
       - kafka
     restart: always
+    command: ["./wait-for-it.sh", "kafka:9092", "--timeout=60", "--", "python", "consumer.py"]
     networks:
       - kafka_network
 
-  kafka_elt:
-    container_name: etl
+  etl_utils:
+    container_name: etl_utils
     build: ./src/etl
     depends_on:
       - kafka
     restart: always
-    command: ["python", "etl.py"]
+    command: ["/wait-for-it.sh", "kafka:9092", "--timeout=60", "--", "python", "etl_utils.py"]
     networks:
       - kafka_network
 
@@ -65,13 +67,13 @@ services:
     networks:
       - kafka_network
 
-  kafka_to_supabase:
-    container_name: kafka_to_supabase_etl
+  remote_db_loader:
+    container_name: remote_db_loader
     build: ./src/etl
     depends_on:
       - kafka
     restart: always
-    command: ["python", "kafka_to_supabase_etl.py"]
+    command: ["/wait-for-it.sh", "localhost:29092", "--timeout=60", "--", "python", "remote_db_loader.py"]
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}

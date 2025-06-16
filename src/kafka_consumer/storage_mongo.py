@@ -28,7 +28,7 @@ def guardar_en_mongo(documento):
             filter_key = documento  # sin filtro único, podría cambiar
 
         collection.update_one(filter_key, {"$set": documento}, upsert=True)
-        print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
+        #print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
 
     except Exception as e:
         print("❌ Error al guardar en MongoDB :", e)

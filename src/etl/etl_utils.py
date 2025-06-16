@@ -4,8 +4,9 @@ import csv
 import os
 
 # --- Configuración de Kafka ---
-KAFKA_TOPIC = "probando"
-KAFKA_BOOTSTRAP_SERVERS = ["localhost:29092"]
+KAFKA_TOPIC = "probando" 
+KAFKA_BOOTSTRAP_SERVERS = ["kafka:9092"]
+# KAFKA_BOOTSTRAP_SERVERS = ["localhost:29092"]
 
 consumer = KafkaConsumer(
     KAFKA_TOPIC,
@@ -51,6 +52,7 @@ def clean_address_field(text):
     return text.replace(',', '')
 
 def clean_data(record):
+    #print(f"🔍🔍 Procesando registro: {record}")
     if 'name' in record:
         record['name'] = clean_name(record['name'])
 
@@ -106,7 +108,7 @@ def save_batch(batch_number, final=False):
     filename_json = f"personas_combinadas_batch_{batch_number}.json" if not final else "personas_combinadas_final.json"
     with open(filename_json, "w", encoding="utf-8") as fjson:
         json.dump(people_data, fjson, indent=2, ensure_ascii=False)
-    print(f"💾 JSON guardado: {filename_json}")
+    #print(f"💾 JSON guardado: {filename_json}")
 
     # CSV
     filename_csv = f"personas_combinadas_batch_{batch_number}.csv" if not final else "personas_combinadas_final.csv"
@@ -123,10 +125,10 @@ def save_batch(batch_number, final=False):
         writer.writeheader()
         for person in flat_people:
             writer.writerow(person)
-    print(f"📄 CSV guardado: {filename_csv}")
+    #print(f"📄 CSV guardado: {filename_csv}")
 
 # --- Escucha de mensajes ---
-print("⏳ Escuchando mensajes de Kafka... Ctrl+C para detener.")
+#print("⏳ Escuchando mensajes de Kafka... Ctrl+C para detener.")
 message_count = 0
 batch_number = 1
 SAVE_INTERVAL = 5000
@@ -153,5 +155,5 @@ except KeyboardInterrupt:
 
 finally:
     save_batch(batch_number, final=True)
-    print("✅ Todos los datos consolidados y guardados.")
+    #print("✅ Todos los datos consolidados y guardados.")
 
