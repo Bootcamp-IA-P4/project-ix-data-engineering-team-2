@@ -1,12 +1,7 @@
 from kafka import KafkaConsumer
 import json
 import csv
-import os
-import sys
-from datetime import datetime
-from typing import Dict, Any
-from dotenv import load_dotenv
-from ..utils.logg import write_log
+from utils.logg import write_log
 
 # --- Configuración de Kafka ---
 KAFKA_TOPIC = "probando" 

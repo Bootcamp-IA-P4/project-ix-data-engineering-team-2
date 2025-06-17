@@ -15,7 +15,7 @@ def main():
     #print("Esperando mensajes...")
     for message in consumer:
         #print("Mensaje recibido:")
-        #print(json.dumps(message.value, indent=2))  # bonito para debug
+        print(json.dumps(message.value, indent=2))  # bonito para debug
 
         # Guardar en Mongo
         guardar_en_mongo(message.value)
@@ -24,4 +24,5 @@ def main():
             
 
 if __name__ == "__main__":
+    print("|||- Iniciando consumidor de Kafka...")
     main()

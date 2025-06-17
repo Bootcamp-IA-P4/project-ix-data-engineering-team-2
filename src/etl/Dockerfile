@@ -1,10 +1,23 @@
 FROM python:3.10-slim
 
+# Instalar netcat para wait-for-it.sh
+RUN apt-get update && apt-get install -y netcat-traditional && rm -rf /var/lib/apt/lists/*
+
+# Crear directorio de trabajo
 WORKDIR /app
+
+# Copiar los archivos del proyecto
 COPY . .
-RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
-COPY wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
+
+# Instalar dependencias
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Configurar PYTHONPATH
 ENV PYTHONPATH=/app
-CMD ["python", "remote_db_loader.py"]
+
+# Hacer el script ejecutable
+#RUN chmod +x /app/src/etl/wait-for-it.sh
+
+# Ejecutar el script
+CMD ["python", "mongo_to_postgres.py"]

@@ -1,10 +1,10 @@
 from pymongo import MongoClient
-
 client = MongoClient("mongodb://mongo:27017/")
 db = client["raw_mongo_db"]
 
 def guardar_en_mongo(documento):
     try:
+        print("Guardando documento en MongoDB:", documento)
         keys = set(k.lower() for k in documento.keys())
 
         if "passport" in keys and "name" in keys:
