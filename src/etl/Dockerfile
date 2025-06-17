@@ -6,4 +6,5 @@ RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get c
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
+ENV PYTHONPATH=/app
 CMD ["python", "remote_db_loader.py"]

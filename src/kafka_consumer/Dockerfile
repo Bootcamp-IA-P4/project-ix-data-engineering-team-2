@@ -1,6 +1,17 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y netcat-traditional && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+
+# Copy all files
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN chmod +x wait-for-it.sh
-CMD ["python", "consumer.py"]
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Set PYTHONPATH to include src directory
+ENV PYTHONPATH=/app
+
+CMD ["python", "src/kafka_consumer/consumer.py"]

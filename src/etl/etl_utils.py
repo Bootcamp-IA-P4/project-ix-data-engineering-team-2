@@ -2,19 +2,16 @@ from kafka import KafkaConsumer
 import json
 import csv
 import os
+import sys
+from datetime import datetime
+from typing import Dict, Any
+from dotenv import load_dotenv
+from ..utils.logg import write_log
 
 # --- Configuración de Kafka ---
 KAFKA_TOPIC = "probando" 
 KAFKA_BOOTSTRAP_SERVERS = ["kafka:9092"]
 # KAFKA_BOOTSTRAP_SERVERS = ["localhost:29092"]
-
-consumer = KafkaConsumer(
-    KAFKA_TOPIC,
-    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
-    auto_offset_reset="earliest",
-    enable_auto_commit=True,
-    value_deserializer=lambda x: json.loads(x.decode("utf-8"))
-)
 
 # --- Estructuras para datos y asociación ---
 people_data = []
@@ -52,7 +49,7 @@ def clean_address_field(text):
     return text.replace(',', '')
 
 def clean_data(record):
-    #print(f"🔍🔍 Procesando registro: {record}")
+    write_log("INFO", "etl_utils.py", f"Procesando registro: {record}")
     if 'name' in record:
         record['name'] = clean_name(record['name'])
 
@@ -80,7 +77,6 @@ def clean_data(record):
 
     return record
 
-
 def find_person_key(record):
     for key in identifying_keys:
         if key in record:
@@ -106,26 +102,47 @@ def flatten_with_prefix(record):
 def save_batch(batch_number, final=False):
     # JSON
     filename_json = f"personas_combinadas_batch_{batch_number}.json" if not final else "personas_combinadas_final.json"
-    with open(filename_json, "w", encoding="utf-8") as fjson:
-        json.dump(people_data, fjson, indent=2, ensure_ascii=False)
-    #print(f"💾 JSON guardado: {filename_json}")
+    try:
+        with open(filename_json, "w", encoding="utf-8") as fjson:
+            json.dump(people_data, fjson, indent=2, ensure_ascii=False)
+        write_log("INFO", "etl_utils.py", f"JSON guardado: {filename_json}")
+    except Exception as e:
+        write_log("ERROR", "etl_utils.py", f"Error al guardar JSON {filename_json}: {str(e)}")
 
     # CSV
     filename_csv = f"personas_combinadas_batch_{batch_number}.csv" if not final else "personas_combinadas_final.csv"
-    flat_people = [flatten_with_prefix(p) for p in people_data]
+    try:
+        flat_people = [flatten_with_prefix(p) for p in people_data]
 
-    # Obtener todas las columnas posibles
-    all_keys = set()
-    for person in flat_people:
-        all_keys.update(person.keys())
-    all_keys = sorted(all_keys)
-
-    with open(filename_csv, "w", encoding="utf-8", newline='') as fcsv:
-        writer = csv.DictWriter(fcsv, fieldnames=all_keys)
-        writer.writeheader()
+        # Obtener todas las columnas posibles
+        all_keys = set()
         for person in flat_people:
-            writer.writerow(person)
-    #print(f"📄 CSV guardado: {filename_csv}")
+            all_keys.update(person.keys())
+        all_keys = sorted(all_keys)
+
+        with open(filename_csv, "w", encoding="utf-8", newline='') as fcsv:
+            writer = csv.DictWriter(fcsv, fieldnames=all_keys)
+            writer.writeheader()
+            for person in flat_people:
+                writer.writerow(person)
+        write_log("INFO", "etl_utils.py", f"CSV guardado: {filename_csv}")
+    except Exception as e:
+        write_log("ERROR", "etl_utils.py", f"Error al guardar CSV {filename_csv}: {str(e)}")
+
+def create_kafka_consumer():
+    try:
+        consumer = KafkaConsumer(
+            KAFKA_TOPIC,
+            bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+            auto_offset_reset="earliest",
+            enable_auto_commit=True,
+            value_deserializer=lambda x: json.loads(x.decode("utf-8"))
+        )
+        write_log("INFO", "etl_utils.py", "Kafka consumer creado exitosamente")
+        return consumer
+    except Exception as e:
+        write_log("ERROR", "etl_utils.py", f"Error al crear Kafka consumer: {str(e)}")
+        raise
 
 # --- Escucha de mensajes ---
 #print("⏳ Escuchando mensajes de Kafka... Ctrl+C para detener.")
@@ -133,27 +150,28 @@ message_count = 0
 batch_number = 1
 SAVE_INTERVAL = 5000
 
-try:
-    for message in consumer:
-        record = message.value
-        record = clean_data(record)
-        idx = find_person_key(record)
-        if idx is not None:
-            people_data[idx].update(record)
-        else:
-            idx = len(people_data)
-            people_data.append(record)
-        register_keys(record, idx)
+# try:
+#     for message in create_kafka_consumer():
+#         record = message.value
+#         record = clean_data(record)
+#         idx = find_person_key(record)
+#         if idx is not None:
+#             people_data[idx].update(record)
+#         else:
+#             idx = len(people_data)
+#             people_data.append(record)
+#         register_keys(record, idx)
 
-        message_count += 1
-        if message_count % SAVE_INTERVAL == 0:
-            save_batch(batch_number)
-            batch_number += 1
+#         message_count += 1
+#         if message_count % SAVE_INTERVAL == 0:
+#             save_batch(batch_number)
+#             batch_number += 1
 
-except KeyboardInterrupt:
-    print("\n🛑 Interrumpido por el usuario.")
+# except KeyboardInterrupt:
+#     print("\n🛑 Interrumpido por el usuario.")
 
-finally:
-    save_batch(batch_number, final=True)
-    #print("✅ Todos los datos consolidados y guardados.")
+# finally:
+#     save_batch(batch_number, final=True)
+#     #print("✅ Todos los datos consolidados y guardados.")
+
 
