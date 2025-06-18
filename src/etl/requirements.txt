@@ -1,2 +1,4 @@
-kafka-python
+kafka-python-ng==2.2.2
 pymongo
+supabase
+python-dotenv
