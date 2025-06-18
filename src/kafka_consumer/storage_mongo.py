@@ -1,13 +1,28 @@
 import os
 from pymongo import MongoClient
+from src.utils.logg import write_log
+
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:adminpassword@mongo:27017/")
-client = MongoClient(MONGO_URI)
-db = client["raw_mongo_db"]
+client = None
+db = None
+
+def conectar_mongo():
+    global client, db
+    try:
+        if client is None:
+            client = MongoClient(MONGO_URI)
+            db = client["raw_mongo_db"]
+            write_log("INFO", "storage_mongo.py", "Conectado a MongoDB correctamente.")
+    except Exception as e:
+        write_log("ERROR", "storage_mongo.py", f"Error conectando a MongoDB: {e}")
+        raise
 
 def guardar_en_mongo(documento):
     try:
-        #print("Guardando documento en MongoDB:", documento)
+        if client is None or db is None:
+            conectar_mongo()
+
         keys = set(k.lower() for k in documento.keys())
 
         if "passport" in keys and "name" in keys:
@@ -24,16 +39,14 @@ def guardar_en_mongo(documento):
             filter_key = {"passport": documento.get("passport")}
         elif "ipv4" in keys:
             collection = db["net_data"]
-            # usar IPv4 como filtro único
             filter_key = {"IPv4": documento.get("IPv4")}
         else:
             collection = db["unknown_type"]
-            filter_key = documento  # sin filtro único, podría cambiar
+            filter_key = documento  # sin filtro único, puede cambiar
 
         collection.update_one(filter_key, {"$set": documento}, upsert=True)
-        #print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
+        write_log("INFO", "storage_mongo.py", f"Documento guardado o actualizado en colección: {collection.name}")
 
     except Exception as e:
-        #print("❌ Error al guardar en MongoDB :", e)
-        print("")
+        write_log("ERROR", "storage_mongo.py", f"Error al guardar en MongoDB: {e}")
 
