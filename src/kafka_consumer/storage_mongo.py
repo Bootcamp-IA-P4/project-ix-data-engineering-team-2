@@ -7,7 +7,7 @@ db = client["raw_mongo_db"]
 
 def guardar_en_mongo(documento):
     try:
-        print("Guardando documento en MongoDB:", documento)
+        #print("Guardando documento en MongoDB:", documento)
         keys = set(k.lower() for k in documento.keys())
 
         if "passport" in keys and "name" in keys:
@@ -31,8 +31,9 @@ def guardar_en_mongo(documento):
             filter_key = documento  # sin filtro único, podría cambiar
 
         collection.update_one(filter_key, {"$set": documento}, upsert=True)
-        print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
+        #print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
 
     except Exception as e:
-        print("❌ Error al guardar en MongoDB :", e)
+        #print("❌ Error al guardar en MongoDB :", e)
+        print("")
 
