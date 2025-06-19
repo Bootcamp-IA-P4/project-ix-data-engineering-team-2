@@ -159,3 +159,19 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
+
+# Grafana runtime files
+monitoring/grafana/data/
+monitoring/grafana/plugins/
+monitoring/grafana/grafana.db
+monitoring/grafana/pdf/
+monitoring/grafana/csv/
+monitoring/grafana/png/
+monitoring/grafana/__pycache__/
+monitoring/grafana/logs/
+monitoring/grafana/conf/
+monitoring/grafana/public/
+monitoring/grafana/node_modules/
+monitoring/grafana/yarn.lock
+monitoring/grafana/package-lock.json
+monitoring/grafana/package.json
