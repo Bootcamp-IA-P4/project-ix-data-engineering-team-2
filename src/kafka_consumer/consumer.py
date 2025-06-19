@@ -3,7 +3,12 @@ import json
 import redis
 import hashlib
 from storage_mongo import guardar_en_mongo
-#from src.utils.logg import write_log
+import sys
+import os
+
+# Resto de tus imports
+from etl.utils.logg import write_log
+
 
 # Configurar Redis (host y puerto pueden venir de variables de entorno si quieres)
 redis_client = redis.Redis(host='redis', port=6379, decode_responses=True)
@@ -13,8 +18,8 @@ def fingerprint(message):
     return hashlib.sha256(json.dumps(message, sort_keys=True).encode('utf-8')).hexdigest()
 
 
-def write_log(level, module, message):
-    print(f"{level} - {module} - {message}")
+# def write_log(level, module, message):
+#     print(f"{level} - {module} - {message}")
 
 def main():
     try:
