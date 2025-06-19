@@ -20,3 +20,5 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Use wait-for-it.sh to wait for Kafka
 CMD ["python", "consumer.py"]
+
+EXPOSE 9102
