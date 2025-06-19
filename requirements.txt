@@ -2,3 +2,4 @@ kafka-python
 pymongo
 python-dotenv
 supabase
+redis
