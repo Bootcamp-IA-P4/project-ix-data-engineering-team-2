@@ -3,7 +3,7 @@ import json
 import redis
 import hashlib
 from storage_mongo import guardar_en_mongo
-from src.utils.logg import write_log
+#from src.utils.logg import write_log
 
 # Configurar Redis (host y puerto pueden venir de variables de entorno si quieres)
 redis_client = redis.Redis(host='redis', port=6379, decode_responses=True)
@@ -11,6 +11,10 @@ redis_client = redis.Redis(host='redis', port=6379, decode_responses=True)
 def fingerprint(message):
     # Creamos hash único para mensaje para deduplicar
     return hashlib.sha256(json.dumps(message, sort_keys=True).encode('utf-8')).hexdigest()
+
+
+def write_log(level, module, message):
+    print(f"{level} - {module} - {message}")
 
 def main():
     try:
@@ -29,6 +33,15 @@ def main():
 
     for message in consumer:
         try:
+            # # --- DEBUG: simular mensaje duplicado ---
+            # test_msg = {"fullname": "Ana García", "city": "Madrid"}
+            # fp = fingerprint(test_msg)
+
+            # if not redis_client.exists(fp):
+            #     print("🔄 Primer mensaje (nuevo): lo procesamos")
+            #     redis_client.set(fp, 1, ex=86400)
+            # else:
+            #     print("❌ Mensaje duplicado: ignorado")
             msg = message.value
             fp = fingerprint(msg)
 

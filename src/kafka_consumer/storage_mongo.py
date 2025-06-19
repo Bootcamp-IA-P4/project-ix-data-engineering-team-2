@@ -1,6 +1,6 @@
 import os
 from pymongo import MongoClient
-from src.utils.logg import write_log
+#from src.utils.logg import write_log
 
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:adminpassword@mongo:27017/")
@@ -17,6 +17,10 @@ def conectar_mongo():
     except Exception as e:
         write_log("ERROR", "storage_mongo.py", f"Error conectando a MongoDB: {e}")
         raise
+
+
+def write_log(level, module, message):
+    print(f"{level} - {module} - {message}")
 
 def guardar_en_mongo(documento):
     try:
