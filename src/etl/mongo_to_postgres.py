@@ -4,12 +4,6 @@ from pymongo import MongoClient
 from supabase import create_client
 from etl_utils import (
     clean_data,
-    find_person_key,
-    register_keys,
-    identifying_keys,
-    person_index,
-    people_data,
-    group_records,
     address_match,
     nombres_en_fullname
 )
@@ -77,31 +71,6 @@ def get_mongo_collections():
         "bank_data": db["bank_data"],
         "net_data": db["net_data"]
     }
-
-def extract_and_group_records(collections):
-    # Extraer registros de MongoDB y agruparlos
-    print("🔄 Extrayendo y agrupando registros de MongoDB...")
-    people_data.clear()
-    person_index.clear()
-
-    # Extraer y limpiar todos los documentos de todas las colecciones
-    all_docs = []
-    for cname, col in collections.items():
-        for doc in col.find():
-            doc.pop("_id", None)
-            clean_doc = clean_data(doc)
-            all_docs.append(clean_doc)
-            write_log("INFO", "mongo_to_postgres.py", f"Documento extraído y limpiado de {cname}: {clean_doc}")
-
-
-    # Agrupar usando la lógica de etl_utils
-    group_records(all_docs)
-    print("DEBUG >> Personas agrupadas (resumen):")
-    for i, person in enumerate(people_data):
-        print(f"  [{i}] {person}")
-    print(f"✅ Total de personas agrupadas: {len(people_data)}")
-    write_log("INFO", "mongo_to_postgres.py", f"Total de personas agrupadas: {len(people_data)}")
-    return people_data
 
 def insert_location(supabase, person):
     address = person.get("address")
