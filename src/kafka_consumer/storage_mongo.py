@@ -1,10 +1,27 @@
 import os
 from pymongo import MongoClient
 from prometheus_client import Counter, Histogram, Gauge, Summary
+import sys
+from etl.utils.logg import write_log
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:adminpassword@mongo:27017/")
-client = MongoClient(MONGO_URI)
-db = client["raw_mongo_db"]
+client = None
+db = None
+
+def conectar_mongo():
+    global client, db
+    try:
+        if client is None:
+            client = MongoClient(MONGO_URI)
+            db = client["raw_mongo_db"]
+            write_log("INFO", "storage_mongo.py", "Conectado a MongoDB correctamente.")
+    except Exception as e:
+        write_log("ERROR", "storage_mongo.py", f"Error conectando a MongoDB: {e}")
+        raise
+
+
+# def write_log(level, module, message):
+#     print(f"{level} - {module} - {message}")
 
 MONGO_INSERTS = Counter('mongo_inserts_total', 'Total documentos insertados en MongoDB')
 MONGO_ERRORS = Counter('mongo_insert_errors_total', 'Errores al insertar en MongoDB')

@@ -3,3 +3,4 @@ pymongo
 supabase
 python-dotenv
 prometheus_client
+redis
