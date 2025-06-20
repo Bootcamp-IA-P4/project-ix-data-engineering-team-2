@@ -1,0 +1,83 @@
+{
+  "id": null,
+  "title": "Data Pipeline Overview",
+  "tags": ["pipeline", "kafka", "mongo", "supabase"],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Kafka - Mensajes Enviados",
+      "targets": [{"expr": "kafka_messages_sent_total", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Kafka - Errores de Envío",
+      "targets": [{"expr": "kafka_send_errors_total", "refId": "A"}],
+      "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Kafka - Tamaño Medio de Mensaje",
+      "targets": [{"expr": "avg(kafka_message_size_bytes)", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 4, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Kafka Consumer - Mensajes Consumidos",
+      "targets": [{"expr": "kafka_messages_consumed_total", "refId": "A"}],
+      "gridPos": {"x": 6, "y": 4, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Kafka Consumer - Errores de Consumo",
+      "targets": [{"expr": "kafka_consume_errors_total", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 8, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "MongoDB - Documentos Insertados",
+      "targets": [{"expr": "mongo_inserts_total", "refId": "A"}],
+      "gridPos": {"x": 6, "y": 8, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "MongoDB - Errores de Inserción",
+      "targets": [{"expr": "mongo_insert_errors_total", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 12, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Supabase - Personas Migradas",
+      "targets": [{"expr": "supabase_persons_migrated_total", "refId": "A"}],
+      "gridPos": {"x": 6, "y": 12, "w": 6, "h": 4}
+    },
+    {
+      "type": "stat",
+      "title": "Supabase - Errores de Inserción",
+      "targets": [{"expr": "supabase_insert_errors_total", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 16, "w": 6, "h": 4}
+    },
+    {
+      "type": "graph",
+      "title": "Kafka - Tiempo de Envío de Mensajes",
+      "targets": [{"expr": "rate(kafka_message_send_seconds_sum[1m]) / rate(kafka_message_send_seconds_count[1m])", "refId": "A"}],
+      "gridPos": {"x": 6, "y": 16, "w": 12, "h": 8}
+    },
+    {
+      "type": "graph",
+      "title": "MongoDB - Tiempo de Inserción",
+      "targets": [{"expr": "rate(mongo_insert_seconds_sum[1m]) / rate(mongo_insert_seconds_count[1m])", "refId": "A"}],
+      "gridPos": {"x": 0, "y": 24, "w": 12, "h": 8}
+    },
+    {
+      "type": "graph",
+      "title": "Supabase - Tiempo de Inserción",
+      "targets": [{"expr": "rate(supabase_insert_seconds_sum[1m]) / rate(supabase_insert_seconds_count[1m])", "refId": "A"}],
+      "gridPos": {"x": 12, "y": 24, "w": 12, "h": 8}
+    }
+  ]
+} 

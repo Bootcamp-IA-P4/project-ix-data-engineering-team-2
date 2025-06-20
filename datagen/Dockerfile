@@ -8,6 +8,8 @@ RUN pip install -r requirements.txt
 
 CMD [ "python", "./kafka_push.py" ]
 
+EXPOSE 9101
+
 
 
 

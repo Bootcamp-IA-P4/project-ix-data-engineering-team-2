@@ -2,4 +2,5 @@ kafka-python-ng==2.2.2
 pymongo
 supabase
 python-dotenv
+prometheus_client
 redis

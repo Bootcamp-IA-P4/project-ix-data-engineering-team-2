@@ -4,17 +4,12 @@ from pymongo import MongoClient
 from supabase import create_client
 from etl_utils import (
     clean_data,
-    find_person_key,
-    register_keys,
-    identifying_keys,
-    person_index,
-    people_data,
-    group_records,
     address_match,
     nombres_en_fullname
 )
 from utils.logg import write_log
 import json
+from prometheus_client import start_http_server, Counter, Histogram, Gauge, Summary
 
 
 # Cargar variables de entorno
@@ -28,6 +23,13 @@ MONGO_DB = os.getenv('MONGO_DB', 'raw_mongo_db')  # Cambiado a raw_mongo_db que 
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 
+MIGRATED_PERSONS = Counter('supabase_persons_migrated_total', 'Total personas migradas a Supabase')
+SUPABASE_INSERT_ERRORS = Counter('supabase_insert_errors_total', 'Errores al insertar en Supabase')
+SUPABASE_INSERT_TIME = Histogram('supabase_insert_seconds', 'Tiempo en insertar en Supabase')
+SUPABASE_INSERT_IN_PROGRESS = Gauge('supabase_insert_in_progress', 'Inserciones en proceso en Supabase')
+SUPABASE_INSERT_SUMMARY = Summary('supabase_insert_summary_seconds', 'Resumen de tiempos de inserción en Supabase')
+
+start_http_server(9103)  # Puerto Prometheus para este servicio
 
 def check_mongo_connection():
     try:
@@ -70,54 +72,33 @@ def get_mongo_collections():
         "net_data": db["net_data"]
     }
 
-def extract_and_group_records(collections):
-    # Extraer registros de MongoDB y agruparlos
-    print("🔄 Extrayendo y agrupando registros de MongoDB...")
-    people_data.clear()
-    person_index.clear()
-
-    # Extraer y limpiar todos los documentos de todas las colecciones
-    all_docs = []
-    for cname, col in collections.items():
-        for doc in col.find():
-            doc.pop("_id", None)
-            clean_doc = clean_data(doc)
-            all_docs.append(clean_doc)
-            write_log("INFO", "mongo_to_postgres.py", f"Documento extraído y limpiado de {cname}: {clean_doc}")
-
-
-    # Agrupar usando la lógica de etl_utils
-    group_records(all_docs)
-    print("DEBUG >> Personas agrupadas (resumen):")
-    for i, person in enumerate(people_data):
-        print(f"  [{i}] {person}")
-    print(f"✅ Total de personas agrupadas: {len(people_data)}")
-    write_log("INFO", "mongo_to_postgres.py", f"Total de personas agrupadas: {len(people_data)}")
-    return people_data
-
 def insert_location(supabase, person):
     address = person.get("address")
     city = person.get("city")
     if not address or not city:
         return None
     try:
-        resp = supabase.table("locations").select("location_id").eq("address", address).eq("city", city).execute()
-        if resp.data:
-            location_id = resp.data[0]["location_id"]
-        else:
-            ins = supabase.table("locations").insert({"address": address, "city": city}).execute()
-            location_id = ins.data[0]["location_id"]
+        with SUPABASE_INSERT_TIME.time(), SUPABASE_INSERT_SUMMARY.time():
+            SUPABASE_INSERT_IN_PROGRESS.inc()
+            resp = supabase.table("locations").select("location_id").eq("address", address).eq("city", city).execute()
+            if resp.data:
+                location_id = resp.data[0]["location_id"]
+            else:
+                ins = supabase.table("locations").insert({"address": address, "city": city}).execute()
+                location_id = ins.data[0]["location_id"]
         write_log("INFO", "mongo_to_postgres.py", f"Ubicación insertada/obtenida: {address}, {city} -> {location_id}")
         return location_id
     except Exception as e:
+        SUPABASE_INSERT_ERRORS.inc()
         write_log("ERROR", "mongo_to_postgres.py", f"Error insertando ubicación: {e}")
         return None
+    finally:
+        SUPABASE_INSERT_IN_PROGRESS.dec()
 
 def insert_person(supabase, person, location_id):
     if not person.get("passport") or not person.get("name") or not person.get("last_name") or not person.get("email"):
         write_log("WARNING", "mongo_to_postgres.py", f"Datos insuficientes para persona: {person}")
         return
-    # Ignorar fullname y address
     data = {
         "passport": person.get("passport"),
         "first_name": person.get("name"),
@@ -128,11 +109,17 @@ def insert_person(supabase, person, location_id):
         "location_id_fk": location_id
     }
     try:
-        supabase.table("persons").upsert(data, on_conflict=["passport"]).execute()
+        with SUPABASE_INSERT_TIME.time(), SUPABASE_INSERT_SUMMARY.time():
+            SUPABASE_INSERT_IN_PROGRESS.inc()
+            supabase.table("persons").upsert(data, on_conflict=["passport"]).execute()
+            MIGRATED_PERSONS.inc()
         write_log("INFO", "mongo_to_postgres.py", f"Persona insertada/actualizada: {data}")
     except Exception as e:
+        SUPABASE_INSERT_ERRORS.inc()
         print(f"ERROR >> Fallo insertando en persons: {e}")
         write_log("ERROR", "mongo_to_postgres.py", f"Error insertando persons: {e}")
+    finally:
+        SUPABASE_INSERT_IN_PROGRESS.dec()
 
 def insert_bank(supabase, person):
     if not person.get("passport") or not person.get("IBAN"):
@@ -143,32 +130,40 @@ def insert_bank(supabase, person):
         "salary": person.get("salary")
     }
     try:
-        supabase.table("bank_data").upsert(data, on_conflict=["passport_fk"]).execute()
+        with SUPABASE_INSERT_TIME.time(), SUPABASE_INSERT_SUMMARY.time():
+            SUPABASE_INSERT_IN_PROGRESS.inc()
+            supabase.table("bank_data").upsert(data, on_conflict=["passport_fk"]).execute()
         write_log("INFO", "mongo_to_postgres.py", f"Bank_data insertado/actualizado: {data}")
     except Exception as e:
+        SUPABASE_INSERT_ERRORS.inc()
         print(f"ERROR >> Fallo insertando en bank_data: {e}")
         write_log("ERROR", "mongo_to_postgres.py", f"Error insertando bank_data: {e}")
+    finally:
+        SUPABASE_INSERT_IN_PROGRESS.dec()
 
 def insert_network(supabase, person, location_id):
     if not person.get("passport") or not person.get("IPv4"):
         return
-    # Ignorar fullname y address
     data = {
         "passport_fk": person.get("passport"),
         "location_id_fk": location_id,
         "ip_address": person.get("IPv4")
     }
     try:
-        supabase.table("network_data").upsert(data, on_conflict=["passport_fk"]).execute()
+        with SUPABASE_INSERT_TIME.time(), SUPABASE_INSERT_SUMMARY.time():
+            SUPABASE_INSERT_IN_PROGRESS.inc()
+            supabase.table("network_data").upsert(data, on_conflict=["passport_fk"]).execute()
         write_log("INFO", "mongo_to_postgres.py", f"Network_data insertado/actualizado: {data}")
     except Exception as e:
+        SUPABASE_INSERT_ERRORS.inc()
         print(f"ERROR >> Fallo insertando en network_data: {e}")
         write_log("ERROR", "mongo_to_postgres.py", f"Error insertando network_data: {e}")
+    finally:
+        SUPABASE_INSERT_IN_PROGRESS.dec()
 
 def insert_professional(supabase, person):
     if not person.get("passport") or not person.get("company"):
         return
-    # Ignorar fullname y address
     data = {
         "passport_fk": person.get("passport"),
         "company_name": person.get("company"),
@@ -178,11 +173,16 @@ def insert_professional(supabase, person):
         "job_title": person.get("job")
     }
     try:
-        supabase.table("professional_data").upsert(data, on_conflict=["passport_fk"]).execute()
+        with SUPABASE_INSERT_TIME.time(), SUPABASE_INSERT_SUMMARY.time():
+            SUPABASE_INSERT_IN_PROGRESS.inc()
+            supabase.table("professional_data").upsert(data, on_conflict=["passport_fk"]).execute()
         write_log("INFO", "mongo_to_postgres.py", f"Professional_data insertado/actualizado: {data}")
     except Exception as e:
+        SUPABASE_INSERT_ERRORS.inc()
         print(f"ERROR >> Fallo insertando en professional_data: {e}")
         write_log("ERROR", "mongo_to_postgres.py", f"Error insertando professional_data: {e}")
+    finally:
+        SUPABASE_INSERT_IN_PROGRESS.dec()
 
 def buscar_passport_por_fullname_address(person, personas):
     """

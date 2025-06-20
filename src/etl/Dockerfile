@@ -21,3 +21,5 @@ ENV PYTHONPATH=/app
 
 # Ejecutar el script
 CMD ["python", "mongo_to_postgres.py"]
+
+EXPOSE 9103
