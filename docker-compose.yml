@@ -119,6 +119,7 @@ services:
       - "3000:3000"
     volumes:
       - ./monitoring/grafana:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - prometheus
     networks:

@@ -1,0 +1,99 @@
+{
+  "id": null,
+  "title": "Full Pipeline Metrics",
+  "tags": [],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Kafka Messages Produced",
+      "targets": [
+        { "expr": "kafka_messages_produced_total", "refId": "A" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "Kafka Produce Errors",
+      "targets": [
+        { "expr": "kafka_produce_errors_total", "refId": "B" }
+      ],
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "Kafka Messages Consumed",
+      "targets": [
+        { "expr": "kafka_messages_consumed_total", "refId": "C" }
+      ],
+      "gridPos": { "x": 0, "y": 3, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "Kafka Consume Errors",
+      "targets": [
+        { "expr": "kafka_consume_errors_total", "refId": "D" }
+      ],
+      "gridPos": { "x": 6, "y": 3, "w": 6, "h": 3 }
+    },
+    {
+      "type": "graph",
+      "title": "Kafka Message Processing Time",
+      "targets": [
+        { "expr": "kafka_message_process_time_seconds", "refId": "E" }
+      ],
+      "gridPos": { "x": 0, "y": 6, "w": 12, "h": 6 }
+    },
+    {
+      "type": "stat",
+      "title": "Mongo Insert Errors",
+      "targets": [
+        { "expr": "mongo_insert_errors_total", "refId": "F" }
+      ],
+      "gridPos": { "x": 0, "y": 12, "w": 6, "h": 3 }
+    },
+    {
+      "type": "graph",
+      "title": "Mongo Insert Time",
+      "targets": [
+        { "expr": "mongo_insert_time_seconds", "refId": "G" }
+      ],
+      "gridPos": { "x": 6, "y": 12, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "Supabase Insert Errors",
+      "targets": [
+        { "expr": "supabase_insert_errors_total", "refId": "H" }
+      ],
+      "gridPos": { "x": 0, "y": 15, "w": 6, "h": 3 }
+    },
+    {
+      "type": "graph",
+      "title": "Supabase Insert Time",
+      "targets": [
+        { "expr": "supabase_insert_seconds", "refId": "I" }
+      ],
+      "gridPos": { "x": 6, "y": 15, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "ETL Complete Persons",
+      "targets": [
+        { "expr": "etl_complete_persons_total", "refId": "J" }
+      ],
+      "gridPos": { "x": 0, "y": 18, "w": 6, "h": 3 }
+    },
+    {
+      "type": "stat",
+      "title": "ETL Incomplete Persons",
+      "targets": [
+        { "expr": "etl_incomplete_persons_total", "refId": "K" }
+      ],
+      "gridPos": { "x": 6, "y": 18, "w": 6, "h": 3 }
+    }
+  ]
+}
