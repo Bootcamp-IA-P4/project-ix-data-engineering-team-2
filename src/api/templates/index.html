@@ -50,22 +50,16 @@
 </head>
 <body>
   <form class="form-container">
-    <select name="genero" required>
-      <option value="">Selecciona el genero</option>
-      <option value="M">Hombre</option>
-      <option value="F">Mujer</option>
-      <option value="ND">No Definido</option>
-    </select>
-
+   
     <select name="city" required>
-      <option value="">Selecciona la ciudad</option>
+      <option value="all">todas las ciudades</option>
         {% for ciudad in ciudades %}
             <option value="{{ ciudad }}">{{ ciudad }}</option>
         {% endfor %}
     </select>
 
     <select name="job" required>
-      <option value="">Selecciona el trabajo</option>
+      <option value="all">todos los trabajos </option>
       {% for trabajo in trabajos %}
           <option value="{{ trabajo }}">{{ trabajo }}</option>
       {% endfor %}
