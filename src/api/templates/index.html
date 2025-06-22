@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario con Selects</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 300px;
+    }
+
+    select, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <form class="form-container">
+   
+    <select name="city" required>
+      <option value="all">todas las ciudades</option>
+        {% for ciudad in ciudades %}
+            <option value="{{ ciudad }}">{{ ciudad }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="job" required>
+      <option value="all">todos los trabajos </option>
+      {% for trabajo in trabajos %}
+          <option value="{{ trabajo }}">{{ trabajo }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Enviar</button>
+    <a href="{{ url }}">{{ url }}</a>
+  </form>
+</body>
+</html>

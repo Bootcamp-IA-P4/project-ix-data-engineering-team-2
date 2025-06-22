@@ -1,0 +1,6 @@
+kafka-python
+pymongo
+python-dotenv
+supabase
+prometheus_client
+redis

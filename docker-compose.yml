@@ -1,0 +1,150 @@
+version: '3.8'
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka_network
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_MESSAGE_MAX_BYTES: 1000000
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 1000000
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - kafka_network
+
+  random_generator:
+    container_name: random_generator
+    build: ./datagen
+    depends_on:
+      - kafka
+    restart: always
+    networks:
+      - kafka_network
+
+  kafka_consumer:
+    container_name: kafka_consumer
+    build: ./src/kafka_consumer 
+    depends_on:
+      - kafka
+    restart: always
+    volumes:
+      - ./src:/app/src  # ← Monta toda la estructura src
+    environment:
+        - PYTHONPATH=/app/src  # ← Configura PYTHONPATH
+        - MONGO_URI=mongodb://admin:adminpassword@mongo:27017/
+    networks:
+      - kafka_network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+    networks:
+      - kafka_network
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=admin
+    - MONGO_INITDB_ROOT_PASSWORD=adminpassword
+
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+    - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+    - ME_CONFIG_MONGODB_ADMINPASSWORD=adminpassword
+    - ME_CONFIG_MONGODB_SERVER=mongo
+    depends_on:
+      - mongo
+    networks:
+      - kafka_network
+
+  mongo-to-postgres:
+    container_name: mongo_to_postgres
+    build: 
+      context: ./src/etl
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/etl:/app
+    working_dir: /app
+    depends_on:      
+      - kafka_consumer
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://admin:adminpassword@mongo:27017/
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    networks:
+      - kafka_network
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - kafka_network
+
+  grafana:
+    #image: grafana/grafana:latest
+    build:
+      context: ./monitoring/grafana
+      dockerfile: Dockerfile
+    container_name: grafana
+    #user: "472"  # UID interno usado por Grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - kafka_network
+
+      
+  redis:
+    image: redis:latest
+    container_name: redis_kafka
+    ports:
+      - "6379:6379"
+    networks:
+      - kafka_network
+    restart: always
+
+
+volumes:
+  mongo_data:
+
+networks:
+  kafka_network:
+    driver: bridge

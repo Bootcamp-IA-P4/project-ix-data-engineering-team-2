@@ -1,0 +1,6 @@
+pymongo
+python-dotenv
+kafka-python-ng==2.2.2
+prometheus_client
+redis
+
