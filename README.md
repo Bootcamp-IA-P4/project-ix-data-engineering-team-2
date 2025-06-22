@@ -1,4 +1,18 @@
 # PROYECTO DATA ENGINEER: Construyendo un Pipeline ETL para HR Pro 🚀
+---
+
+### 👥 Equipo del Proyecto
+
+**Roles y colaboradores principales** (*DataTech Solutions Team*):
+
+| Nombre               | Rol                     | GitHub                                      |
+|----------------------|-------------------------|---------------------------------------------|
+| **Juan Carlos Macías**   | Data Engineer           | [juancmacias](https://github.com/juancmacias) |
+| **Polina**               | Data Engineer           | [fintihlupik](https://github.com/fintihlupik) |
+| **Orlando Alcalá Reyes** | Data Engineer           | [odar1997](https://github.com/odar1997)    |
+| **Juan Domingo**     | Scrum Master/Data Engineer | [jdomdev](https://github.com/jdomdev)      |
+
+---
 
 ## 📜 1. Contexto del Proyecto: Inmersión en la Ingeniería de Datos para HR Pro
 
