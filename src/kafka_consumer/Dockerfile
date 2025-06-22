@@ -21,7 +21,7 @@ COPY *.py .
 # Set working directory to where the code will be mounted
  WORKDIR /app/src/kafka_consumer
 
-# CMD ["python", "consumer.py"]
-CMD ["sh", "-c", "while ! nc -z kafka 9092; do echo 'Esperando Kafka...'; sleep 2; done; echo 'Kafka disponible!'; python consumer.py"]
+CMD ["python", "consumer.py"]
+# CMD ["sh", "-c", "while ! nc -z kafka 9092; do echo 'Esperando Kafka...'; sleep 2; done; echo 'Kafka disponible!'; python consumer.py"]
 
 EXPOSE 9102

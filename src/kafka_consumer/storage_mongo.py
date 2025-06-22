@@ -3,7 +3,11 @@ from pymongo import MongoClient
 from prometheus_client import Counter, Histogram, Gauge, Summary
 import sys
 from etl.utils.logg import write_log
-
+MONGO_INSERTS = Counter('mongo_inserts_total', 'Total documentos insertados en MongoDB')
+MONGO_ERRORS = Counter('mongo_insert_errors_total', 'Errores al insertar en MongoDB')
+MONGO_INSERT_TIME = Histogram('mongo_insert_seconds', 'Tiempo en insertar documento en MongoDB')
+MONGO_INSERT_IN_PROGRESS = Gauge('mongo_insert_in_progress', 'Documentos en proceso de inserción')
+MONGO_INSERT_SUMMARY = Summary('mongo_insert_summary_seconds', 'Resumen de tiempos de inserción')
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:adminpassword@mongo:27017/")
 client = None
 db = None
@@ -19,21 +23,10 @@ def conectar_mongo():
         write_log("ERROR", "storage_mongo.py", f"Error conectando a MongoDB: {e}")
         raise
 
-
-# def write_log(level, module, message):
-#     print(f"{level} - {module} - {message}")
-
-MONGO_INSERTS = Counter('mongo_inserts_total', 'Total documentos insertados en MongoDB')
-MONGO_ERRORS = Counter('mongo_insert_errors_total', 'Errores al insertar en MongoDB')
-MONGO_INSERT_TIME = Histogram('mongo_insert_seconds', 'Tiempo en insertar documento en MongoDB')
-MONGO_INSERT_IN_PROGRESS = Gauge('mongo_insert_in_progress', 'Documentos en proceso de inserción')
-MONGO_INSERT_SUMMARY = Summary('mongo_insert_summary_seconds', 'Resumen de tiempos de inserción')
-
 def guardar_en_mongo(documento):
     try:
         with MONGO_INSERT_TIME.time(), MONGO_INSERT_SUMMARY.time():
             MONGO_INSERT_IN_PROGRESS.inc()
-            #print("Guardando documento en MongoDB:", documento)
             keys = set(k.lower() for k in documento.keys())
 
             if "passport" in keys and "name" in keys:
@@ -55,16 +48,17 @@ def guardar_en_mongo(documento):
             else:
                 collection = db["unknown_type"]
                 filter_key = documento  # sin filtro único, podría cambiar
-
+            # Actualizar o insertar el documento en la colección correspondiente
             collection.update_one(filter_key, {"$set": documento}, upsert=True)
             MONGO_INSERTS.inc()
-            #print(f"✅ Documento guardado o actualizado en colección: {collection.name}")
+            write_log("INFO", "storage_mongo.py", f"Documento guardado o actualizado en colección: {collection.name}")
+    except KeyboardInterrupt:
+        write_log("WARNING", "storage_mongo.py", "Inserción interrumpida por el usuario.")
+        sys.exit(0)
 
     except Exception as e:
         MONGO_ERRORS.inc()
-        #print("❌ Error al guardar en MongoDB :", e)
-        print("")
-
+        write_log("ERROR", "storage_mongo.py", f"Error al guardar en MongoDB: {e}")
     finally:
         MONGO_INSERT_IN_PROGRESS.dec()
 

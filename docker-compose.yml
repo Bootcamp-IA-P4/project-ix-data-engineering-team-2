@@ -106,7 +106,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
@@ -115,17 +115,22 @@ services:
       - kafka_network
 
   grafana:
-    image: grafana/grafana:latest
+    #image: grafana/grafana:latest
+    build:
+      context: ./monitoring/grafana
+      dockerfile: Dockerfile
     container_name: grafana
+    #user: "472"  # UID interno usado por Grafana
     ports:
       - "3000:3000"
     volumes:
-      - ./monitoring/grafana:/var/lib/grafana
+      - ./monitoring/grafana/data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - prometheus
     networks:
       - kafka_network
+
       
   redis:
     image: redis:latest
