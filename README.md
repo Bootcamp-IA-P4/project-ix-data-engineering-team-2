@@ -5,10 +5,10 @@
 
 | Nombre               | Rol                | GitHub       |
 |----------------------|--------------------|--------------|
-| Juan Carlos Macías   | Data Engineer      | juancmacias  |
-| Polina               | Data Engineer      | fintihlupik  |
-| Orlando Alcalá Reyes | Data Engineer      | odar1997     |
-| Juan Domingo         | Scrum Master/Data Engineer | jdomdev |
+| Juan Carlos Macías   | Data Engineer      | [juancmacias](https://github.com/juancmacias)  |
+| Polina               | Data Engineer      | [fintihlupik](https://github.com/fintihlupik)  |
+| Orlando Alcalá Reyes | Data Engineer      | [odar1997](https://github.com/odar1997)     |
+| Juan Domingo         | Scrum Master/Data Engineer | [jdomdev](https://github.com/jdomdev) |
 
 ## 📜 1. Contexto del Proyecto: Inmersión en la Ingeniería de Datos para HR Pro
 Bienvenidos al emocionante desafío de DataTech Solutions. Nuestro cliente, HR Pro, una empresa líder en el sector de recursos humanos, se enfrenta al reto de gestionar y analizar volúmenes masivos de datos procedentes de diversas fuentes (solicitudes de empleo, registros de nómina, encuestas de empleados, entre otros). Como equipo de ingenieros de datos freelance, nuestra misión ha sido diseñar e implementar un sistema de gestión de datos eficiente que permita a HR Pro organizar y analizar esta valiosa información.
