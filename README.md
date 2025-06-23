@@ -1,38 +1,31 @@
-# PROYECTO DATA ENGINEER: Construyendo un Pipeline ETL para HR Pro 🚀
----
+# 🚀 PROYECTO DATA ENGINEER: Construyendo un Pipeline ETL para HR Pro
 
-### 👥 Equipo del Proyecto
+## 👥 Equipo del Proyecto
+**Roles y colaboradores principales (DataTech Solutions Team):**
 
-**Roles y colaboradores principales** (*DataTech Solutions Team*):
-
-| Nombre               | Rol                     | GitHub                                      |
-|----------------------|-------------------------|---------------------------------------------|
-| **Juan Carlos Macías**   | Data Engineer           | [juancmacias](https://github.com/juancmacias) |
-| **Polina**               | Data Engineer           | [fintihlupik](https://github.com/fintihlupik) |
-| **Orlando Alcalá Reyes** | Data Engineer           | [odar1997](https://github.com/odar1997)    |
-| **Juan Domingo**     | Scrum Master/Data Engineer | [jdomdev](https://github.com/jdomdev)      |
-
----
+| Nombre               | Rol                | GitHub       |
+|----------------------|--------------------|--------------|
+| Juan Carlos Macías   | Data Engineer      | juancmacias  |
+| Polina               | Data Engineer      | fintihlupik  |
+| Orlando Alcalá Reyes | Data Engineer      | odar1997     |
+| Juan Domingo         | Scrum Master/Data Engineer | jdomdev |
 
 ## 📜 1. Contexto del Proyecto: Inmersión en la Ingeniería de Datos para HR Pro
-
 Bienvenidos al emocionante desafío de DataTech Solutions. Nuestro cliente, HR Pro, una empresa líder en el sector de recursos humanos, se enfrenta al reto de gestionar y analizar volúmenes masivos de datos procedentes de diversas fuentes (solicitudes de empleo, registros de nómina, encuestas de empleados, entre otros). Como equipo de ingenieros de datos freelance, nuestra misión ha sido diseñar e implementar un sistema de gestión de datos eficiente que permita a HR Pro organizar y analizar esta valiosa información.
 
 Este proyecto se ha centrado en el desarrollo de un proceso ETL (Extracción, Transformación y Carga) robusto y escalable para integrar datos en un sistema unificado. Hemos trabajado con una amplia variedad de tipos de datos –desde información personal y financiera hasta métricas de rendimiento–, asegurando su almacenamiento eficiente tanto en una base de datos NoSQL (MongoDB) como en un almacén de datos SQL (PostgreSQL en Supabase). Todo el sistema ha sido implementado en un entorno Dockerizado para garantizar la portabilidad y la facilidad de despliegue.
 
 El resultado es un sistema funcional y exhaustivamente documentado, listo para potenciar la capacidad de HR Pro en la gestión y análisis de sus datos de recursos humanos.
 
-### ⚠️ DISCLAIMER IMPORTANTE: Restricción de Acceso al Código Generador de Datos
+## ⚠️ DISCLAIMER IMPORTANTE: Restricción de Acceso al Código Generador de Datos
+Los datos utilizados en este proyecto **NO SON REALES**. Se generan de manera aleatoria y se envían a un servidor de Apache Kafka. El código fuente tanto para el servidor Kafka como para el generador de datos se encuentra en un repositorio de GitHub separado y está debidamente documentado.
 
-Los datos utilizados en este proyecto NO SON REALES. Se generan de manera aleatoria y se envían a un servidor de Apache Kafka. El código fuente tanto para el servidor Kafka como para el generador de datos se encuentra en un repositorio de GitHub separado y está debidamente documentado.
-
-Es ABSOLUTAMENTE FUNDAMENTAL que NO se acceda a leer el código que genera estos datos. Hacerlo supondría conocer los detalles internos de su creación, lo cual se alejaría significativamente de un caso real y reduciría el aspecto pedagógico y desafiante de este proyecto. La intención detrás de esta restricción es fomentar el enfoque en los aspectos cruciales de la ingeniería de datos: la extracción, transformación y carga, sin depender del conocimiento del origen de los datos.
+**Es ABSOLUTAMENTE FUNDAMENTAL que NO se acceda a leer el código que genera estos datos.** Hacerlo supondría conocer los detalles internos de su creación, lo cual se alejaría significativamente de un caso real y reduciría el aspecto pedagógico y desafiante de este proyecto. La intención detrás de esta restricción es fomentar el enfoque en los aspectos cruciales de la ingeniería de datos: la extracción, transformación y carga, sin depender del conocimiento del origen de los datos.
 
 Confiamos en que esta directriz será respetada, promoviendo una experiencia de aprendizaje honesta y valiosa.
 
 ## 🏗️ 2. Arquitectura del Pipeline
-
-El siguiente diagrama ilustra la arquitectura completa del pipeline de datos, desde la generación hasta la visualización y consulta.
+El siguiente diagrama ilustra la arquitectura completa del pipeline de datos, desde la generación hasta la visualización y consulta, mostrando la interconexión de cada componente.
 
 ```mermaid
 graph TD
@@ -78,133 +71,238 @@ graph TD
 ```
 
 ## 🎯 3. Objetivos del Proyecto (¡Todos Cumplidos!)
-
 Nuestro equipo ha alcanzado con éxito todos los objetivos clave establecidos para este proyecto:
 
-* ✅ **Implementación de un proceso ETL completo:** Desde la ingesta en tiempo real hasta el almacenamiento relacional.
-* ✅ **Preprocesamiento de datos exhaustivo:** Limpieza, unificación y manejo de inconsistencias.
-* ✅ **Trabajo eficiente con colas de mensajes:** Consumo y gestión de un stream de datos con Apache Kafka.
-* ✅ **Implementación y gestión de bases de datos:** Uso de MongoDB (NoSQL) y PostgreSQL (SQL) para distintos propósitos dentro del pipeline.
+✅ **Implementación de un proceso ETL completo**: Desde la ingesta en tiempo real hasta el almacenamiento relacional.
+
+✅ **Preprocesamiento de datos exhaustivo**: Limpieza, unificación y manejo de inconsistencias.
+
+✅ **Trabajo eficiente con colas de mensajes**: Consumo y gestión de un stream de datos con Apache Kafka.
+
+✅ **Implementación y gestión de bases de datos**: Uso de MongoDB (NoSQL) y PostgreSQL (SQL) para distintos propósitos dentro del pipeline.
 
 ## 📦 4. Condiciones de Entrega (¡Satisfactorias al 100%!)
-
 Hemos cumplido con todas las condiciones de entrega del cliente, demostrando la solidez y completitud de nuestro trabajo:
 
-* ✅ **Repositorio en GitHub** con el código fuente completamente documentado y siguiendo las mejores prácticas de control de versiones.
-* ✅ Un **programa dockerizado** que se conecta al servidor de Kafka, procesa los mensajes en tiempo real y los persiste de manera ordenada tanto en MongoDB como en PostgreSQL (gestionado a través de Supabase).
-* ✅ **Demo en vivo** mostrando el funcionamiento impecable de la aplicación, desde la generación de datos hasta su visualización final.
-* ✅ **Presentación técnica completa**, explicando detalladamente los objetivos del proyecto, el proceso de desarrollo y las tecnologías implementadas.
-* ✅ **Tablero Kanban** (utilizando plataformas como Trello o Jira) con una gestión de proyecto clara y organizada.
+✅ **Repositorio en GitHub** con el código fuente completamente documentado y siguiendo las mejores prácticas de control de versiones.
+
+✅ **Un programa dockerizado** que se conecta al servidor de Kafka, procesa los mensajes en tiempo real y los persiste de manera ordenada tanto en MongoDB como en PostgreSQL (gestionado a través de Supabase).
+
+✅ **Demo en vivo** mostrando el funcionamiento impecable de la aplicación, desde la generación de datos hasta su visualización final.
+
+✅ **Presentación técnica completa**, explicando detalladamente los objetivos del proyecto, el proceso de desarrollo y las tecnologías implementadas.
+
+✅ **Tablero Kanban** (utilizando plataformas como Trello o Jira) con una gestión de proyecto clara y organizada.
 
 ## ⚙️ 5. Tecnologías Utilizadas (¡El Stack de Nuestro Pipeline!)
-
 Hemos utilizado un conjunto robusto de tecnologías para construir este pipeline de datos, aprovechando las fortalezas de cada una:
 
 | Tecnología | Aplicación en el Proyecto |
-| :--- | :--- |
-| `Git` / `GitHub` 🐙 | Control de versiones, gestión de ramas organizada (main, dev, feature/*), commits atómicos y descriptivos que documentan la evolución del proyecto. |
-| `Docker` 🐳 / `Docker Compose` | Orquestación de todos los servicios clave del pipeline: servidores de Kafka y Zookeeper, instancias de MongoDB y PostgreSQL, así como las herramientas de monitorización Grafana y Prometheus. Contenedorización individual para cada componente asegurando un entorno reproducible, aislado y portable. |
-| `Python` 🐍 | Core del desarrollo: Scripts para la generación de datos, la lógica del consumidor de Kafka, los procesos de Extracción, Transformación y Carga (ETL), y la implementación de APIs. |
-| `Apache Kafka` | Sistema de mensajería distribuida para la ingesta de eventos de datos en tiempo real. |
-| `Redis` | Base de datos en memoria utilizada para la **deduplicación de mensajes** del stream de Kafka, garantizando la idempotencia del proceso de ingesta. |
-| `MongoDB` 🍃 (NoSQL) | Utilizada como un "Data Lake" para la ingesta inicial y el almacenamiento de datos brutos en su formato original, ofreciendo flexibilidad para datos semi-estructurados. |
-| `PostgreSQL` 🐘 (SQL vía Supabase) | Empleada como "Data Warehouse" para el almacenamiento de datos transformados, limpios, normalizados y agrupados, optimizados para análisis y consultas estructuradas. |
-| `Prometheus` 🔥 | Utilizado para la recolección y agregación de métricas de rendimiento de todos los componentes del pipeline. Configurado a través de monitoring/prometheus/prometheus.yml. |
-| `Grafana` 📈 | Ofrece paneles de control interactivos para visualizar en tiempo real métricas clave como el consumo de mensajes, la velocidad de procesamiento, los tiempos de persistencia y el rendimiento general de la aplicación. |
-| `API RESTful` (FastAPI) | Expone los datos consolidados de PostgreSQL para que puedan ser consultados por aplicaciones externas o un frontend. |
-| `Librerías Python` | `kafka-python`, `pymongo`, `supabase-py`, `redis`, `fastapi`, `faker`, `prometheus_client` |
+|------------|---------------------------|
+| **Git / GitHub** 🐙 | Control de versiones, gestión de ramas organizada (main, dev, feature/*), commits atómicos y descriptivos que documentan la evolución del proyecto. |
+| **Docker** 🐳 / Docker Compose | Orquestación de todos los servicios clave del pipeline: servidores de Kafka y Zookeeper, instancias de MongoDB, Redis, Supabase, Grafana y Prometheus. Contenedorización individual para cada componente asegurando un entorno reproducible, aislado y portable. |
+| **Python** 🐍 | Core del desarrollo: Scripts para la generación de datos, la lógica del consumidor de Kafka, los procesos de Extracción, Transformación y Carga (ETL), y la implementación de APIs. |
+| **Apache Kafka** | Sistema de mensajería distribuida para la ingesta de eventos de datos en tiempo real. |
+| **Redis** ⚡ | Base de datos en memoria utilizada para la deduplicación de mensajes del stream de Kafka, garantizando la idempotencia y eficiencia del proceso de ingesta antes de su almacenamiento primario. |
+| **MongoDB** 🍃 (NoSQL) | Utilizada como un "Data Lake" para la ingesta inicial y el almacenamiento de datos brutos en su formato original, ofreciendo flexibilidad para datos semi-estructurados. |
+| **PostgreSQL** 🐘 (SQL vía Supabase) | Empleada como "Data Warehouse" para el almacenamiento de datos transformados, limpios, normalizados y agrupados, optimizados para análisis y consultas estructuradas. |
+| **Prometheus** 🔥 | Utilizado para la recolección y agregación de métricas de rendimiento de todos los componentes del pipeline. Configurado a través de monitoring/prometheus/prometheus.yml. |
+| **Grafana** 📈 | Ofrece paneles de control interactivos para visualizar en tiempo real métricas clave como el consumo de mensajes, la velocidad de procesamiento, los tiempos de persistencia y el rendimiento general de la aplicación. |
+| **API RESTful (FastAPI)** | Expone los datos consolidados de PostgreSQL para que puedan ser consultados por aplicaciones externas o un frontend, proporcionando una interfaz limpia y estructurada. |
+| **Librerías Python** | kafka-python, pymongo, supabase-py, redis, fastapi, faker, prometheus_client |
 
-## 🏆 6. Niveles de Entrega Alcanzados (¡Un Logro Integral!)
+## 🗂️ 6. Componentes del Pipeline y Flujo de Datos
+Nuestro pipeline ETL está compuesto por varios microservicios y módulos, cada uno con una función específica para garantizar el procesamiento y flujo de datos eficiente.
 
+### 6.1. Kafka Consumer (`src/kafka_consumer/consumer.py`) 📥
+**Función**: Este servicio es el punto de entrada principal para los datos en nuestro pipeline. Consume activamente mensajes del topic de Kafka ('probando') producido externamente por el servicio datagen.
+
+**Tratamiento**: Cada mensaje recibido es deserializado y se somete a un proceso de deduplicación utilizando Redis. Solo los mensajes únicos se envían a la función de almacenamiento en MongoDB, garantizando la idempotencia del proceso.
+
+**Microservicio**: Sí, opera como un microservicio independiente, corriendo en su propio contenedor Docker (`src/kafka_consumer/Dockerfile`).
+
+### 6.2. Almacenamiento en MongoDB (`src/kafka_consumer/storage_mongo.py`) 🍃
+**Función**: Recibe los mensajes pre-procesados (deduplicados) del Kafka Consumer y los persiste en la base de datos MongoDB. Los datos se organizan en colecciones específicas (`personal_data`, `location_data`, `professional_data`, `bank_data`, `net_data`) según su estructura y contenido.
+
+**Tratamiento**: La lógica de almacenamiento utiliza operaciones upsert basadas en claves únicas para cada tipo de dato, lo que permite insertar nuevos registros o actualizar existentes, evitando así duplicados en la capa de datos brutos.
+
+**Microservicio**: Aunque es un módulo dentro del contenedor del Kafka Consumer, su lógica de almacenamiento es desacoplada y se beneficia de la flexibilidad de MongoDB para manejar los datos brutos.
+
+### 6.3. ETL: Extracción, Transformación y Carga (`src/etl/mongo_to_postgres.py` + `src/etl/etl_utils.py`) 🔄
+Este es el corazón de la transformación de datos, donde la información bruta de MongoDB se refina para el análisis en PostgreSQL.
+```mermaid
+flowchart TD
+    A[MongoDB: Colecciones<br>personal_data, location_data,<br>professional_data, bank_data, net_data]
+    B[Extracción de datos]
+    C[Limpieza y transformación<br>etl_utils.py]
+    D[Fusión y validación de registros]
+    E[Inserción en Supabase<br>PostgreSQL]
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    
+    class A database;
+    class B extract;
+    class C transform;
+    class D merge;
+    class E load;
+    classDef database fill:#cff,stroke:#333;
+    classDef extract fill:#f9f,stroke:#333;
+    classDef transform fill:#9f9,stroke:#333;
+    classDef merge fill:#ff9,stroke:#333;
+    classDef load fill:#f99,stroke:#333;
+```
+**Función**: Extrae los datos segmentados y brutos de MongoDB, los somete a un riguroso proceso de limpieza y transformación, y finalmente los carga de manera estructurada en PostgreSQL (gestionado por Supabase).
+
+**Extracción**: Se conecta a todas las colecciones relevantes de MongoDB (`personal_data`, `location_data`, `professional_data`, `bank_data`, `net_data`) para recolectar todos los fragmentos de información de cada persona.
+
+**Transformación y Limpieza** (`src/etl/etl_utils.py`):
+- **Limpieza de nombres**: Elimina prefijos como "Sr.", "Sra.", "Dr." y normaliza las cadenas (mayúsculas/minúsculas).
+- **Limpieza de teléfonos y direcciones**: Elimina caracteres no válidos, dejando solo el formato limpio para su almacenamiento.
+- **Conversión de campos**: Unifica formatos y tipos de datos (ej., salary a VARCHAR para manejar símbolos de moneda, sex de lista a cadena).
+- **Fusión de datos**: Une inteligentemente los datos de las distintas colecciones utilizando el passport como identificador clave, consolidando toda la información de una persona en un único registro.
+- **Validación**: Se implementa lógica para validar la completitud de los registros, asegurando que solo las personas con todos los datos esenciales se migren a PostgreSQL.
+
+**Carga**: Inserta los datos limpios y fusionados en las tablas de Supabase (`locations`, `persons`, `bank_data`, `network_data`, `professional_data`). Se utiliza la funcionalidad UPSERT para evitar duplicados y mantener la integridad referencial en el destino.
+
+**Microservicio**: Sí, el proceso ETL opera como un microservicio independiente, con su propio contenedor Docker (`src/etl/Dockerfile`).
+
+### 6.4. API RESTful (`src/api`) ⚡
+**Función**: Expone los datos consolidados y limpios almacenados en PostgreSQL (Supabase) a través de una interfaz RESTful. Permite a otras aplicaciones o servicios (incluyendo el frontend si lo hay) consultar la información de manera programática.
+
+**Tratamiento**: Permite consultar personas basándose en criterios como ciudad y trabajo, realizando JOINs y filtrados complejos sobre las tablas de PostgreSQL. Además, limpia los resultados (elimina campos nulos o sensibles) antes de devolverlos al cliente para asegurar la calidad de la respuesta.
+
+**Microservicio**: Sí, la API es un servicio independiente, corriendo en su propio contenedor y conectándose a Supabase.
+
+### 6.5. Monitorización (monitoring con Prometheus y Grafana) 📈🔥
+La monitorización es un pilar fundamental en este pipeline, permitiendo la visibilidad completa del estado y rendimiento de los microservicios.
+
+```mermaid
+flowchart LR
+    subgraph "Servicios Monitoreados"
+        A[Kafka Consumer]:::fa-download
+        B[ETL]:::fa-sync-alt
+        C[Kafka Push]:::fa-upload
+        D[MongoDB Storage]:::fa-leaf
+        E[Mongo to Postgres]:::fa-database
+    end
+    A -- "Expone Métricas (Puerto 9102)" --> F[Prometheus]:::fa-fire
+    B -- "Expone Métricas (Puerto 9103)" --> F
+    C -- "Expone Métricas (Puerto 9101)" --> F
+    D -- "Expone Métricas (Puerto 9102)" --> F
+    E -- "Expone Métricas (Puerto 9103)" --> F
+    F -- "Fuente de Datos" --> G[Grafana]:::fa-chart-line
+    G -- "Dashboards Interactivos" --> H[Desarrollador/Operaciones]:::fa-user-cog
+```
+
+**Prometheus**:
+- **Función**: Actúa como el motor de recolección de métricas. Hace "scrape" (rastrea) los endpoints HTTP donde cada microservicio expone sus métricas.
+- **Configuración**: El archivo `monitoring/prometheus/prometheus.yml` define los "targets" (los microservicios a monitorizar) y las reglas de recolección.
+- **Métricas Recogidas**: Incluye métricas clave como el número total de mensajes consumidos, mensajes insertados, errores ocurridos, tiempos de procesamiento, latencia de persistencia, etc.
+
+**Grafana**:
+- **Función**: Es la plataforma de visualización. Permite crear dashboards interactivos y personalizados a partir de las métricas recolectadas por Prometheus.
+- **Configuración**: Utilizamos dashboards predefinidos (`monitoring/grafana/provisioning/dashboards/*.json`) que proporcionan una visión clara del estado de la ingesta de Kafka, el proceso ETL, la salud de las bases de datos y el rendimiento general.
+- **Capacidades**: Permite la visualización en tiempo real, configuración de alertas y exploración profunda de los datos históricos.
+
+## 🏆 7. Niveles de Entrega Alcanzados (¡Un Logro Integral!)
 Este proyecto ha superado las expectativas al alcanzar todos los niveles de complejidad definidos, desde el esencial hasta el experto, lo que demuestra un dominio integral de las habilidades y prácticas en Ingeniería de Datos.
 
 ### 🟢 Nivel Esencial:
-* ✅ Configuración robusta del consumer de Kafka para procesar eficientemente miles de mensajes por segundo en tiempo real.
-* ✅ Persistencia eficaz de los mensajes brutos de Kafka en una base de datos documental (MongoDB).
-* ✅ Procesamiento y agrupación avanzada de datos de cada persona (datos personales, de ubicación, profesionales, bancarios y de red) en un único registro consolidado, listo para el análisis.
-* ✅ Persistencia estructurada y normalizada de los datos procesados y agrupados en una base de datos relacional (PostgreSQL en Supabase).
-* ✅ Repositorio Git impecable con una organización clara de ramas y commits atómicos y descriptivos, adhiriéndose a las mejores prácticas de versionado.
-* ✅ Documentación del código exhaustiva y un README detallado en GitHub.
+✅ Configuración robusta del consumer de Kafka para procesar eficientemente miles de mensajes por segundo en tiempo real.
+
+✅ Persistencia eficaz de los mensajes brutos de Kafka en una base de datos documental (MongoDB).
+
+✅ Procesamiento y agrupación avanzada de datos de cada persona (datos personales, de ubicación, profesionales, bancarios y de red) en un único registro consolidado, listo para el análisis.
+
+✅ Persistencia estructurada y normalizada de los datos procesados y agrupados en una base de datos relacional (PostgreSQL en Supabase).
+
+✅ Repositorio Git impecable con una organización clara de ramas y commits atómicos y descriptivos, adhiriéndose a las mejores prácticas de versionado.
+
+✅ Documentación del código exhaustiva y un README detallado en GitHub.
 
 ### 🟡 Nivel Medio:
-* ✅ Implementación de un sistema de logs sofisticado (`src/etl/utils/logg.py`, con logs organizados por fecha) para un seguimiento detallado, depuración y auditoría de los procesos del pipeline.
-* ✅ Inclusión de tests unitarios (`tests/unit/test.py`) para garantizar la calidad, fiabilidad y robustez de los componentes críticos del código.
-* ✅ Dockerización completa de la aplicación utilizando Docker y Docker Compose (`docker-compose.yml`), asegurando un entorno de desarrollo y despliegue reproducible y altamente portable.
+✅ Implementación de un sistema de logs sofisticado (`src/etl/utils/logg.py`, con logs organizados por fecha) para un seguimiento detallado, depuración y auditoría de los procesos del pipeline.
+
+✅ Inclusión de tests unitarios (`tests/unit/test.py`) para garantizar la calidad, fiabilidad y robustez de los componentes críticos del código.
+
+✅ Dockerización completa de la aplicación utilizando Docker y Docker Compose (`docker-compose.yml`), asegurando un entorno de desarrollo y despliegue reproducible y altamente portable.
 
 ### 🟠 Nivel Avanzado:
-* ✅ Monitorización integral y en tiempo real del funcionamiento del pipeline: seguimiento de mensajes consumidos, velocidad de procesamiento, tiempos de persistencia y rendimiento general de la aplicación. Esto se logró mediante la exposición de métricas personalizadas y el uso de Prometheus para la recolección y Grafana para la visualización en dashboards interactivos.
-* ✅ Creación de una API RESTful (`src/api`) robusta, diseñada para conectarse a la base de datos relacional (PostgreSQL) y permitir consultas eficientes sobre la información final procesada, facilitando el acceso a los datos limpios y estructurados.
+✅ Monitorización integral y en tiempo real del funcionamiento del pipeline: seguimiento de mensajes consumidos, velocidad de procesamiento, tiempos de persistencia y rendimiento general de la aplicación. Esto se logró mediante la exposición de métricas personalizadas y el uso de Prometheus para la recolección y Grafana para la visualización en dashboards interactivos.
+
+✅ Creación de una API RESTful (`src/api`) robusta, diseñada para conectarse a la base de datos relacional (PostgreSQL) y permitir consultas eficientes sobre la información final procesada, facilitando el acceso a los datos limpios y estructurados.
 
 ### 🔴 Nivel Experto:
-* ✅ Automatización completa de la carga de datos, asegurando que la información en las bases de datos (MongoDB y PostgreSQL) se actualice de forma continua y en tiempo real, mientras el servidor de Kafka opera sin interrupciones y envía mensajes. Esto garantiza un flujo de datos dinámico y auto-actualizable.
-* ✅ Desarrollo de un frontend sencillo (por ejemplo, utilizando Streamlit o Gradio) que proporciona una interfaz intuitiva para consultar y visualizar los datos de los clientes disponibles en la base de datos SQL procesada, permitiendo una interacción directa con los resultados del pipeline.
+✅ Automatización completa de la carga de datos, asegurando que la información en las bases de datos (MongoDB y PostgreSQL) se actualice de forma continua y en tiempo real, mientras el servidor de Kafka opera sin interrupciones y envía mensajes. Esto garantiza un flujo de datos dinámico y auto-actualizable.
+
+✅ Desarrollo de un frontend sencillo (por ejemplo, utilizando Streamlit o Gradio) que proporciona una interfaz intuitiva para consultar y visualizar los datos de los clientes disponibles en la base de datos SQL procesada, permitiendo una interacción directa con los resultados del pipeline.
 
 ## 📊 7. Evaluación y Relevancia del Proyecto
-
 Este proyecto es una demostración práctica de la capacidad para abordar y resolver desafíos complejos en Ingeniería de Datos. Aborda directamente la capacidad de procesar y almacenar grandes volúmenes de datos de eventos en tiempo real, un criterio fundamental y altamente demandado en la industria moderna.
 
 El manejo de esquemas de datos como Personal data, Location, Professional data, Bank Data y Net Data, que provienen de fuentes diversas y con la inherente variabilidad e inconsistencia de los datos del mundo real, ha requerido una cuidadosa unificación, limpieza y normalización. La solución implementada es adaptable, versátil y robusta, validando la adquisición de habilidades prácticas cruciales en el ámbito de la ingeniería de datos.
 
 ## 🚀 8. Guía de Instalación y Ejecución (¡Pon en Marcha el Pipeline Dockerizado!)
-
 Para levantar todo el ecosistema de este pipeline de datos y ver el proceso en acción en tu máquina local, sigue estos sencillos pasos:
 
-1. **Requisitos Previos:** Asegúrate de tener `Docker` y `Docker Compose` instalados en tu sistema. Si no los tienes, puedes seguir las instrucciones de instalación oficial en docs.docker.com.
+1. **Requisitos Previos**: Asegúrate de tener Docker y Docker Compose instalados en tu sistema. Si no los tienes, puedes seguir las instrucciones de instalación oficial en [docs.docker.com](https://docs.docker.com).
 
-2. **Variables de Entorno:** El servicio ETL necesita credenciales para conectarse a Supabase. Crea un archivo `.env` en la raíz del proyecto y añade tus credenciales:
-    ```env
-    # .env
-    SUPABASE_URL="https://xxx.supabase.co"
-    SUPABASE_SERVICE_ROLE_KEY="tu_super_clave_secreta"
-    ```
+2. **Variables de Entorno**: El servicio ETL necesita credenciales para conectarse a Supabase. Crea un archivo `.env` en la raíz del proyecto y añade tus credenciales:
+   ```env
+   # .env
+   SUPABASE_URL="https://xxx.supabase.co"
+   SUPABASE_SERVICE_ROLE_KEY="tu_super_clave_secreta"
+   ```
 
 3. **Clona este repositorio** en tu máquina local:
-    ```bash
-    git clone [URL_DE_TU_REPOSitorio]
-    cd nombre_de_tu_repositorio
-    ```
+   ```bash
+   git clone [URL_DE_TU_REPOSitorio]
+   cd nombre_de_tu_repositorio
+   ```
 
-4. **Inicia todos los servicios Docker** definidos en docker-compose.yml:
-    ```bash
-    docker-compose up --build
-    ```
-    * La primera vez que ejecutes este comando, el flag `--build` es necesario para construir las imágenes personalizadas de tus servicios.
-    * Para futuras ejecuciones, si no has realizado cambios en el código de tus imágenes, puedes omitir `--build` para un inicio más rápido: `docker-compose up`.
-    * Si prefieres lanzar los servicios en segundo plano para liberar tu terminal, utiliza el flag `-d`: `docker-compose up -d`.
+4. **Inicia todos los servicios Docker** definidos en `docker-compose.yml`:
+   ```bash
+   docker-compose up --build
+   ```
+   *La primera vez que ejecutes este comando, el flag `--build` es necesario para construir las imágenes personalizadas de tus servicios.*
 
-5. **Acceso a las Interfaces de Usuario de los Servicios:**
-    * **Kafka UI** (Control de Temas y Mensajes): `http://localhost:8080` 📊
-    * **Mongo Express** (Explorador de MongoDB): `http://localhost:8081` 🍃
-    * **Prometheus** (Métricas del Pipeline): `http://localhost:9090` 🔥
-    * **Grafana** (Dashboards de Monitorización): `http://localhost:3000` 📈 (Usuario/Contraseña por defecto: `admin` / `admin` - se te pedirá cambiarlos la primera vez).
-    * **API Docs:** `http://localhost:8000/docs` (Documentación interactiva de la API)
+   *Para futuras ejecuciones, si no has realizado cambios en el código de tus imágenes, puedes omitir `--build` para un inicio más rápido: `docker-compose up`.*
 
-6. **Para detener los servicios:**
-    ```bash
-    docker-compose down
-    ```
+   *Si prefieres lanzar los servicios en segundo plano para liberar tu terminal, utiliza el flag `-d`: `docker-compose up -d`.*
+
+5. **Acceso a las Interfaces de Usuario de los Servicios**:
+   - **Kafka UI** (Control de Temas y Mensajes): [http://localhost:8080](http://localhost:8080) 📊
+   - **Mongo Express** (Explorador de MongoDB): [http://localhost:8081](http://localhost:8081) 🍃
+   - **Prometheus** (Métricas del Pipeline): [http://localhost:9090](http://localhost:9090) 🔥
+   - **Grafana** (Dashboards de Monitorización): [http://localhost:3000](http://localhost:3000) 📈 (Usuario/Contraseña por defecto: `admin` / `admin` - se te pedirá cambiarlos la primera vez).
+   - **API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs) (Documentación interactiva de la API)
+
+6. **Para detener los servicios**:
+   ```bash
+   docker-compose down
+   ```
 
 ## 🗂️ 9. Estructura de Datos Manejada: Entendiendo la Fuente
-
 El proyecto gestiona datos JSON variados que simulan la complejidad y heterogeneidad de la información de recursos humanos en un entorno real. Es fundamental destacar la necesidad de unificar y consolidar la información de la misma persona que proviene de diferentes "fragmentos" de datos.
 
-Los esquemas principales de los datos recibidos (pre-transformación) son:
+**Los esquemas principales de los datos recibidos (pre-transformación) son**:
 
-* **Personal data**: `Name`, `Lastname`, `Sex`, `Telfnumber`, `Passport`, `E-Mail`
-* **Location**: `Fullname`, `City`, `Address`
-* **Professional data**: `Fullname`, `Company`, `Company Address`, `Company Telfnumber`, `Company E-Mail`, `Job`
-* **Bank Data**: `Passport`, `IBAN`, `Salary`
-* **Net Data**: `Address`, `IPv4`
+- **Personal data**: Name, Lastname, Sex, Telfnumber, Passport, E-Mail
+- **Location**: Fullname, City, Address
+- **Professional data**: Fullname, Company, Company Address, Company Telfnumber, Company E-Mail, Job
+- **Bank Data**: Passport, IBAN, Salary
+- **Net Data**: Address, IPv4
 
-**Nota Importante:** Parte del desafío del proceso ETL es identificar y unir los datos que pertenecen a la misma persona (utilizando el Passport como clave de unión primaria) y manejar las posibles inconsistencias o variaciones en los datos crudos.
+**Nota Importante**: Parte del desafío del proceso ETL es identificar y unir los datos que pertenecen a la misma persona (utilizando el Passport como clave de unión primaria) y manejar las posibles inconsistencias o variaciones en los datos crudos.
 
 ## 🗄️ 10. Estructura de las Bases de Datos
-
 ### Base de Datos NoSQL (MongoDB) 🍃
-
 La instancia de MongoDB actúa como un "Data Lake" o "Staging Area" para la ingesta inicial de los datos brutos y semi-estructurados que provienen del servidor de Kafka.
 
-```
+```bash
 # Acceso a MongoDB desde el contenedor:
 docker exec -it mongo mongosh
 
@@ -217,7 +315,7 @@ docker exec -it mongo mongosh
 - unknown_type (para datos no clasificados)
 ```
 
-Ejemplos de documentos en las colecciones:
+**Ejemplos de documentos en las colecciones**:
 
 ```javascript
 // personal_data
@@ -241,7 +339,6 @@ Ejemplos de documentos en las colecciones:
 ```
 
 ### Base de Datos SQL (PostgreSQL en Supabase) 🐘
-
 Aquí se almacena la información ya procesada, limpia y consolidada. Este esquema relacional está optimizado para consultas analíticas y reportes.
 
 ```sql
@@ -305,7 +402,6 @@ CREATE TABLE public.professional_data (
 ```
 
 ## 🌳 11. Estructura del Repositorio
-
 La organización de este repositorio refleja la modularidad y las mejores prácticas de un proyecto de ingeniería de datos, facilitando la colaboración y el mantenimiento.
 
 ```
