@@ -8,6 +8,7 @@ import os
 
 # Resto de tus imports
 from etl.utils.logg import write_log
+from etl.etl_utils import clean_data, register_keys_redis,find_person_key_redis
 
 
 # Configurar Redis (host y puerto pueden venir de variables de entorno si quieres)
@@ -38,32 +39,30 @@ def main():
 
     for message in consumer:
         try:
-            # # --- DEBUG: simular mensaje duplicado ---
-            # test_msg = {"fullname": "Ana García", "city": "Madrid"}
-            # fp = fingerprint(test_msg)
-
-            # if not redis_client.exists(fp):
-            #     print("🔄 Primer mensaje (nuevo): lo procesamos")
-            #     redis_client.set(fp, 1, ex=86400)
-            # else:
-            #     print("❌ Mensaje duplicado: ignorado")
             msg = message.value
             fp = fingerprint(msg)
 
-            # Deduplicar usando Redis
             if redis_client.exists(fp):
                 write_log("INFO", "consumer.py", f"Mensaje duplicado ignorado: {fp}")
                 continue
 
-            # Guardar en MongoDB
             guardar_en_mongo(msg)
+            msg = clean_data(msg)  # Limpieza de campos
+            existing_idx = find_person_key_redis(msg)  #busca si alguna clave de las q vienen (identifying keys) ya tiene asociado algun indice
+            if existing_idx is not None:
+                idx = existing_idx
+            else:
+                idx = redis_client.incr('global_person_idx') - 1
 
-            # Guardar fingerprint en Redis con TTL 1 día (86400 segundos)
+            register_keys_redis(msg, idx) # asigna todas las claves al indice ya registrado (p.ej. nº SS: 5897; pasp:123 se va a asociar a indice 12 si el pasp:123 estaba asociado al ind 12)
+
+            
             redis_client.set(fp, 1, ex=86400)
             write_log("INFO", "consumer.py", f"Mensaje procesado y guardado: {fp}")
 
         except Exception as e:
             write_log("ERROR", "consumer.py", f"Error procesando mensaje: {e}")
+
 
 if __name__ == "__main__":
     #print("|||- Iniciando consumidor de Kafka...")

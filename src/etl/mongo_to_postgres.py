@@ -11,10 +11,12 @@ from etl_utils import (
     people_data,
     group_records,
     address_match,
-    nombres_en_fullname
+    nombres_en_fullname,
+    find_person_key_redis
 )
 from utils.logg import write_log
 import json
+from collections import defaultdict 
 
 
 # Cargar variables de entorno
@@ -250,6 +252,20 @@ def fusionar_personas(collections):
 
     return personas_completas
 
+
+def extract_and_group_records_redis(collections):
+    grouped_data = defaultdict(dict)
+    for cname, col in collections.items():
+        for doc in col.find():
+            doc.pop("_id", None)
+            clean_doc = clean_data(doc)
+            person_idx = find_person_key_redis(clean_doc)
+            if person_idx is not None:
+                grouped_data[person_idx].update(clean_doc)
+            else:
+                pass
+    return list(grouped_data.values())
+
 def main():
     # Comprobaciones de conexión
     if not check_mongo_connection():
@@ -260,7 +276,8 @@ def main():
         return
 
     collections = get_mongo_collections()
-    personas = fusionar_personas(collections)
+    #personas = fusionar_personas(collections) 
+    personas = extract_and_group_records_redis(collections) 
     supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
     for person in personas:

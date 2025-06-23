@@ -1,12 +1,17 @@
 from kafka import KafkaConsumer
 import json
 import csv
-from utils.logg import write_log
+from etl.utils.logg import write_log
+import redis
 
 # --- Configuración de Kafka ---
 KAFKA_TOPIC = "probando" 
 KAFKA_BOOTSTRAP_SERVERS = ["kafka:9092"]
 # KAFKA_BOOTSTRAP_SERVERS = ["localhost:29092"]
+
+
+# Configuración del cliente Redis
+redis_client = redis.Redis(host='redis', port=6379, decode_responses=True)
 
 # --- Estructuras para datos y asociación ---
 people_data = []
@@ -72,6 +77,22 @@ def clean_data(record):
 
     return record
 
+# Busca una clave de persona en Redis y devuelve su índice
+def find_person_key_redis(record):
+    for key in identifying_keys:
+        if key in record:
+            val = record[key]
+            idx = redis_client.get(f"person_key:{val}")
+            if idx is not None:
+                return int(idx)
+    return None
+
+# Registra las claves en Redis para poder encontrarlas rápidamente
+def register_keys_redis(record, idx):
+    for key in identifying_keys:
+        if key in record:
+            redis_client.set(f"person_key:{record[key]}", idx)
+
 def find_person_key(record):
     for key in identifying_keys:
         if key in record:
@@ -95,6 +116,19 @@ def find_all_person_indices(record):
     for key in identifying_keys:
         if key in record and record[key] in person_index:
             indices.add(person_index[record[key]])
+            idx = redis_client.get(f"person_key:{record[key]}") # Busca en Redis
+            if idx is not None:
+                indices.add(int(idx)) 
+    return list(indices)
+
+
+def find_indices_redis(record): 
+    indices = set()
+    for key in identifying_keys:
+        if key in record:
+            idx = redis_client.get(f"person_key:{record[key]}")
+            if idx is not None:
+                indices.add(int(idx))
     return list(indices)
 
 def merge_people(indices):
@@ -108,9 +142,11 @@ def merge_people(indices):
     # Elimina duplicados de mayor a menor para no desordenar la lista
     for idx in sorted(indices[1:], reverse=True):
         del people_data[idx]
+    redis_client.flushdb()  # Limpiar Redis para evitar inconsistencias
     # Reconstruye person_index para que apunten a los nuevos índices
     person_index.clear()
     for idx, person in enumerate(people_data):
+        register_keys_redis(person, idx) 
         for key in identifying_keys:
             if key in person:
                 person_index[person[key]] = idx
@@ -124,14 +160,17 @@ def register_keys(record, idx):
 def group_records(records):
     for record in records:
         indices = find_all_person_indices(record)
+        #indices = find_indices_redis(record)
         if indices:
             base_idx = merge_people(indices)
             people_data[base_idx].update(record)
             register_keys(people_data[base_idx], base_idx)
+            register_keys_redis(people_data[base_idx], base_idx)
         else:
             idx = len(people_data)
             people_data.append(record)
             register_keys(record, idx)
+            register_keys_redis(record, idx)
 
 def flatten_with_prefix(record):
     """Devuelve una versión aplanada con prefijos según categoría"""
